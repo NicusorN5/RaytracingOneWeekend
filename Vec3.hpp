@@ -19,6 +19,7 @@ struct Vec3
 
 	static double dot(const Vec3& a, const Vec3& b);
 	static double length(const Vec3& v);
+	static double length_squared(const Vec3& v);
 	static Vec3 cross(const Vec3& a, const Vec3& b);
 	static Vec3 normalize(const Vec3& v);
 	static Vec3 hadamard(const Vec3& a, const Vec3& b);

@@ -3,5 +3,11 @@
 
 struct Color
 {
-	uint8_t R, G, B, A;
+	double R, G, B, A;
+
+	Color operator+(const Color& c);
+	Color operator *(const double s);
+	Color operator *(const Color& c);
 };
+
+Color operator*(const double s, const Color& c);

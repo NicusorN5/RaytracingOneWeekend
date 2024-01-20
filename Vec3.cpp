@@ -1,4 +1,5 @@
 #include "Vec3.hpp"
+#include "Vec3.hpp"
 #include <cmath>
 
 Vec3 Vec3::operator+=(const Vec3& v)
@@ -61,6 +62,11 @@ double Vec3::dot(const Vec3& a, const Vec3& b)
 double Vec3::length(const Vec3& v)
 {
 	return sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
+}
+
+double Vec3::length_squared(const Vec3& v)
+{
+	return v.X * v.X + v.Y * v.Y + v.Z * v.Z;
 }
 
 Vec3 Vec3::cross(const Vec3& v1, const Vec3& v2)
