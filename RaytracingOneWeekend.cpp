@@ -27,6 +27,8 @@ auto write_gradient_image()
 				.G = static_cast<uint8_t>(255 * j),
 				.B = 0 
 			};
+
+			//std::print("progress - i = {}, j = {} \r\n", i, j);
 		}
 	}
 
