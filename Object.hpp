@@ -9,7 +9,11 @@
 class Object
 {
 protected:
-	Object() = default;
+	template<material_type M>
+	Object(M&& mat)
+	{
+		material.reset(new M(std::move(mat)));
+	}
 public:
 	Object(const Object&) = delete;
 	Object(Object&&) noexcept = default;

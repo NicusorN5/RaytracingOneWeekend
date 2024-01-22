@@ -1,5 +1,7 @@
 #pragma once
 #include "PPMImage.hpp"
+#include "World.hpp"
+#include <algorithm>
 
 PPMImage::PPMImage(const unsigned _width, const unsigned _heigth) :
 	width(_width),
@@ -94,9 +96,12 @@ std::ostream& operator <<(std::ostream& ostr, const PPMImage& image)
 
 	for (Color& c : image)
 	{
-		ostr << static_cast<int>(c.R) << ' '
-			<< static_cast<int>(c.G) << ' '
-			<< static_cast<int>(c.B) << "\r\n";
+#pragma warning(push)
+#pragma warning(disable: 4244)
+		ostr << std::clamp<int>(c.R * 255.999, 0, 255) << ' '
+			<< std::clamp<int>(c.G * 255.999, 0, 255) << ' '
+			<< std::clamp<int>(c.B * 255.999, 0, 255) << "\r\n";
+#pragma warning(pop)
 	};
 
 	return ostr;

@@ -1,22 +1,24 @@
 #include "Sphere.hpp"
 
-Sphere::Sphere(const Vec3& c, const double r) : 
-	center(c),
-	radius(r)
-{
-}
-
 std::optional<HitResult> Sphere::hit(const Ray& r) const
 {
-	//Copied from https://github.com/NicusorN5/3D_Rad_Space/blob/master/3DRadSpace/Engine3DRadSpace/Math/Ray.cpp
-	float a = Vec3::dot(r.Direction, r.Origin - center);
-	float nabla = powf(a, 2) - (Vec3::length_squared(r.Origin - center) - powf(radius, 2));
+	Vec3 oc = r.Origin - center;
+	auto a = Vec3::dot(r.Direction, r.Direction);
+	auto b = 2.0 * Vec3::dot(oc, r.Direction);
+	auto c = Vec3::dot(oc, oc) - radius * radius;
+	auto discriminant = b * b - 4 * a * c;
+	
+	auto normal = Vec3::normalize(r.at(discriminant) - center);
 
-	if (nabla < 0) return std::nullopt;
+	if (Vec3::dot(normal, r.Direction) < 0) return std::nullopt;
 
-	double t = -a - sqrtf(nabla);
-	return HitResult{
-		t,
-		Vec3::normalize(r.at(t) - center)
-	};
+	if (discriminant >= 0)
+	{
+		return HitResult
+		{
+			discriminant,
+			normal
+		};
+	}
+	else return std::nullopt;
 }

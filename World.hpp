@@ -21,7 +21,11 @@ public:
 	template<object_derived T>
 	void add(T&& obj)
 	{
-		objects.push_back(std::move(obj));
+		std::unique_ptr<T> newobj;
+		T* ptr = new T(std::move(obj));
+		newobj.reset(ptr);
+
+		objects.push_back(std::move(newobj));
 	}
 
 	template<object_derived T, typename... Params>
@@ -40,4 +44,32 @@ public:
 	}
 
 	Color hit(const Ray& r) const;
+
+	struct iterator
+	{
+		using iterator_category = std::bidirectional_iterator_tag;
+		using difference_type = std::ptrdiff_t;
+		using value_type = Object*;
+		using pointer = Object*;
+		using reference = Object*&;
+
+		using internal_iterator = std::vector<std::unique_ptr<Object>>::iterator;
+	private:
+		internal_iterator i;
+	public:
+		iterator(internal_iterator it);
+
+		iterator operator++();
+		iterator operator++(int);
+		iterator operator--();
+		iterator operator--(int);
+
+		Object* operator ->();
+		Object* operator *();
+
+		auto operator <=>(const iterator&) const = default;
+	};
+
+	iterator begin();
+	iterator end();
 };

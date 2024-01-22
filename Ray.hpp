@@ -6,5 +6,5 @@ struct Ray
 	Vec3 Origin;
 	Vec3 Direction;
 
-	Vec3 at(float t) const;
+	Vec3 at(double t) const;
 };

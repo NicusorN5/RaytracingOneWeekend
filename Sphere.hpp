@@ -4,7 +4,13 @@
 class Sphere : public Object
 {
 public:
-	Sphere(const Vec3& c, const double r);
+	template<material_type M>
+	Sphere(const Vec3& c, const double r, M&& m):
+		Object(std::move(m)),
+		center(c),
+		radius(r)
+	{
+	}
 
 	double radius;
 	Vec3 center;

@@ -12,7 +12,7 @@ endif()
 project ("RaytracingOneWeekend")
 
 # Add source to this project's executable.
-add_executable (RaytracingOneWeekend "RaytracingOneWeekend.cpp" "PPMImage.cpp"  "Ray.cpp" "Camera.cpp" "Sphere.cpp" "World.cpp" "NormalMaterial.cpp")
+add_executable (RaytracingOneWeekend "RaytracingOneWeekend.cpp" "PPMImage.cpp"  "Ray.cpp" "Camera.cpp" "Sphere.cpp" "World.cpp" "NormalMaterial.cpp" "Vec3.cpp" "Color.cpp" )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET RaytracingOneWeekend PROPERTY CXX_STANDARD 23)

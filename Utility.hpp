@@ -13,5 +13,5 @@ constexpr T to_radians(T degrees)
 template<std::floating_point T>
 constexpr T to_degrees(T radians)
 {
-	return T(180.0) / std::numbers::pi_v<T> * degrees;
+	return T(180.0) / std::numbers::pi_v<T> * radians;
 }
