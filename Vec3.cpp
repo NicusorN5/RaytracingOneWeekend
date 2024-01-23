@@ -15,6 +15,14 @@ Vec3 Vec3::operator+(const Vec3& v) const
 	return { X + v.X, Y + v.Y, Z + v.Z };
 }
 
+Vec3 Vec3::operator-() const
+{
+	return Vec3(
+		-X, 
+		-Y
+	);
+}
+
 Vec3 Vec3::operator-=(const Vec3& v)
 {
 	X -= v.X;

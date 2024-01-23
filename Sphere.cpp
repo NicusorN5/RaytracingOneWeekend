@@ -12,7 +12,7 @@ std::optional<HitResult> Sphere::hit(const Ray& r) const
 
 	if (Vec3::dot(normal, r.Direction) < 0) return std::nullopt;
 
-	if (discriminant >= 0)
+	if (discriminant > 0)
 	{
 		return HitResult
 		{

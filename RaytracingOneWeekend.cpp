@@ -11,6 +11,8 @@
 #include "Sphere.hpp"
 #include "Camera.hpp"
 #include "NormalMaterial.hpp"
+#include "Plane.hpp"
+#include "PlainMaterial.hpp"
 
 PPMImage render(const Camera& cam, World& world)
 {
@@ -46,6 +48,7 @@ auto main() -> int
 
 	World world;
 	world.add<Sphere>(Vec3{ 0, 0, -2 }, 1, NormalMaterial());
+	world.add<Plane>(Vec3(0, 1, 0), -2, PlainMaterial(Color(1.0, 0.6, 0.6, 1.0)));
 
 	std::ofstream image("my_image.ppm");
 	image <<  render(camera, world);
