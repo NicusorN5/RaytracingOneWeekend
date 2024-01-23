@@ -7,7 +7,21 @@ PPMImage::PPMImage(const unsigned _width, const unsigned _heigth) :
 	width(_width),
 	height(_heigth)
 {
-	image = std::make_unique<Color[]>(width * height);
+	auto size = width * height;
+	image = std::make_unique<Color[]>(size);
+	//zbuffer = std::make_unique<double[]>(size);
+}
+
+bool PPMImage::write(unsigned x, unsigned y, double z, Color c)
+{
+	const auto coord = width * y + x;
+	//if (z >= zbuffer[coord])
+	{
+		at(x, y) = c;
+		//zbuffer[coord] = z;
+		return true;
+	}
+	return false;
 }
 
 Color& PPMImage::at(unsigned x, unsigned y)
@@ -94,14 +108,18 @@ std::ostream& operator <<(std::ostream& ostr, const PPMImage& image)
 {
 	ostr << "P3\r\n" << image.width << "\r\n" << image.height << "\r\n255\r\n";
 
-	for (Color& c : image)
+	for (unsigned j = 0; j < image.height; j++)
 	{
+		for (unsigned i = 0; i < image.width; i++)
+		{
+			Color c = image.at(i, j);
 #pragma warning(push)
 #pragma warning(disable: 4244)
-		ostr << std::clamp<int>(c.R * 255.999, 0, 255) << ' '
-			<< std::clamp<int>(c.G * 255.999, 0, 255) << ' '
-			<< std::clamp<int>(c.B * 255.999, 0, 255) << "\r\n";
+			ostr << std::clamp<int>(c.R * 255.999, 0, 255) << ' '
+				<< std::clamp<int>(c.G * 255.999, 0, 255) << ' '
+				<< std::clamp<int>(c.B * 255.999, 0, 255) << "\r\n";
 #pragma warning(pop)
+		}
 	};
 
 	return ostr;

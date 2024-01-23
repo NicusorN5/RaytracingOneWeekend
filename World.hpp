@@ -43,31 +43,10 @@ public:
 		return dynamic_cast<T*>(objects.at(i).get());
 	}
 
-	Color hit(const Ray& r) const;
-
-	struct iterator
+	struct iterator : public std::vector<std::unique_ptr<Object>>::iterator
 	{
-		using iterator_category = std::bidirectional_iterator_tag;
-		using difference_type = std::ptrdiff_t;
-		using value_type = Object*;
-		using pointer = Object*;
-		using reference = Object*&;
-
-		using internal_iterator = std::vector<std::unique_ptr<Object>>::iterator;
-	private:
-		internal_iterator i;
-	public:
-		iterator(internal_iterator it);
-
-		iterator operator++();
-		iterator operator++(int);
-		iterator operator--();
-		iterator operator--(int);
-
 		Object* operator ->();
 		Object* operator *();
-
-		auto operator <=>(const iterator&) const = default;
 	};
 
 	iterator begin();

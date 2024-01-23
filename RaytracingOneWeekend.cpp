@@ -33,7 +33,21 @@ PPMImage render(const Camera& cam, World& world)
 				.Direction = ray_direction
 			};
 			
-			image.at(i,j) = world.hit(r);
+			//initial sky write
+			Vec3 unit_direction = Vec3::normalize(r.Direction);
+			auto a = 0.5 * (unit_direction.Y + 1.0);
+			image.write(i, j, 0.0, Color{(1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0),});
+
+			for (auto obj : world)
+			{
+				auto ray_result = obj->hit(r);
+				if (ray_result.has_value())
+				{
+					auto t = ray_result.value();
+					image.write(i, j, t.t, obj->material->hit(r.at(t.t), t.normal));
+				}
+			}
+
 		}
 	}
 
@@ -47,8 +61,10 @@ auto main() -> int
 	camera.fov = to_radians(65.0);
 
 	World world;
-	world.add<Sphere>(Vec3{ 0, 0, -2 }, 1, NormalMaterial());
-	world.add<Plane>(Vec3(0, 1, 0), -2, PlainMaterial(Color(1.0, 0.6, 0.6, 1.0)));
+	//world.add<Sphere>(Vec3{ 0, 1, -2 }, 1, NormalMaterial());
+	//world.add<Sphere>(Vec3{ 0, 0, -2 }, 1, NormalMaterial());
+	world.add<Plane>(Vec3(0, 1, 0), 2, PlainMaterial(Color(1.0, 0.6, 0.6, 1.0)));
+	world.add<Sphere>(Vec3{ 0, -1, -5 }, 3, NormalMaterial());
 
 	std::ofstream image("my_image.ppm");
 	image <<  render(camera, world);

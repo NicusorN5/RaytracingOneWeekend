@@ -8,12 +8,15 @@ class PPMImage
 	unsigned width;
 	unsigned height;
 	std::unique_ptr<Color[]> image;
+	std::unique_ptr<double[]> zbuffer;
+
+	Color& at(unsigned x, unsigned y);
 public:
 	PPMImage(const unsigned _width, const unsigned _heigth);
 	PPMImage(const PPMImage&) = delete;
 	PPMImage(PPMImage&&) noexcept = default;
 
-	Color& at(unsigned x, unsigned y);
+	bool write(unsigned x, unsigned y, double z, Color c);
 
 	Color at(unsigned x, unsigned y) const;
 

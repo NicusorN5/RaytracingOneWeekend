@@ -6,7 +6,7 @@ std::optional<HitResult> Plane::hit(const Ray& r) const
     double denom = Vec3::dot( normal , r.Direction);
 
     // Prevent divide by zero:
-    if (abs(-denom) <= 1e-4f)
+    if (abs(denom) <= 1e-4f)
         return std::nullopt;
 
     // If you want to ensure the ray reflects off only
@@ -25,6 +25,6 @@ std::optional<HitResult> Plane::hit(const Ray& r) const
 
     return HitResult{
         .t = t,
-        .normal = -r.Direction
+        .normal = normal
     };
 }
