@@ -1,12 +1,13 @@
 #pragma once
 #include "Material.hpp"
 
-class PlainMaterial : public Material
+class DiffuseMaterial : public Material
 {
 public:
-	PlainMaterial(Color c = {1,1,1,1});
+	DiffuseMaterial(Color diffuseColor = {1,1,1,1}, double reflq = 0.5);
 
 	Color color;
+	double reflected_quantity;
 
 	// Inherited via Material
 	Color hit(const Vec3& point, const Vec3& norm) const override;

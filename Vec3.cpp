@@ -1,5 +1,5 @@
 #include "Vec3.hpp"
-#include "Vec3.hpp"
+#include "Utility.hpp"
 #include <cmath>
 
 Vec3 Vec3::operator+=(const Vec3& v)
@@ -100,6 +100,15 @@ Vec3 Vec3::hadamard(const Vec3& a, const Vec3& b)
 		a.Y * b.Y,
 		a.Z * b.Z,
 	};
+}
+
+Vec3 Vec3::random_unit()
+{
+	double x = random_floating_point<double>(-1, 1);
+	double y = random_floating_point<double>(-1, 1);
+	double z = random_floating_point<double>(-1, 1);
+
+	return Vec3::normalize({ x,y,z });
 }
 
 Vec3 operator*(const double s, const Vec3& v)

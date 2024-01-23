@@ -14,6 +14,27 @@
 #include "Plane.hpp"
 #include "PlainMaterial.hpp"
 
+constexpr auto render_max_depth = 50;
+
+void render_ray(PPMImage &image, World& world, const Ray& r, unsigned i, unsigned j)
+{
+	//initial sky write
+	Vec3 unit_direction = Vec3::normalize(r.Direction);
+	auto a = 0.5 * (unit_direction.Y + 1.0);
+	image.write(i, j, 0.0, Color{ (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0), });
+
+	for (auto obj : world)
+	{
+		auto ray_result = obj->hit(r);
+		if (ray_result.has_value())
+		{
+			auto t = ray_result.value();
+			if(t.t > 0)
+				image.write(i, j, t.t, obj->material->hit(r.at(t.t), t.normal));
+		}
+	}
+}
+
 PPMImage render(const Camera& cam, World& world)
 {
 	PPMImage image(cam.screen_size.X, cam.screen_size.Y);
@@ -33,21 +54,7 @@ PPMImage render(const Camera& cam, World& world)
 				.Direction = ray_direction
 			};
 			
-			//initial sky write
-			Vec3 unit_direction = Vec3::normalize(r.Direction);
-			auto a = 0.5 * (unit_direction.Y + 1.0);
-			image.write(i, j, 0.0, Color{(1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0),});
-
-			for (auto obj : world)
-			{
-				auto ray_result = obj->hit(r);
-				if (ray_result.has_value())
-				{
-					auto t = ray_result.value();
-					image.write(i, j, t.t, obj->material->hit(r.at(t.t), t.normal));
-				}
-			}
-
+			render_ray(image, world, r, i, j);
 		}
 	}
 
@@ -61,10 +68,8 @@ auto main() -> int
 	camera.fov = to_radians(65.0);
 
 	World world;
-	//world.add<Sphere>(Vec3{ 0, 1, -2 }, 1, NormalMaterial());
-	//world.add<Sphere>(Vec3{ 0, 0, -2 }, 1, NormalMaterial());
 	world.add<Plane>(Vec3(0, 1, 0), 2, PlainMaterial(Color(1.0, 0.6, 0.6, 1.0)));
-	world.add<Sphere>(Vec3{ 0, -1, -5 }, 3, NormalMaterial());
+	world.add<Sphere>(Vec3{ 0, 0, -5 }, 1.5, NormalMaterial());
 
 	std::ofstream image("my_image.ppm");
 	image <<  render(camera, world);

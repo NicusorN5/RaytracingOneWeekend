@@ -1,6 +1,7 @@
 #pragma once
-#include "Vec3.hpp"
+#include "Ray.hpp"
 #include "Color.hpp"
+#include <vector>
 
 class Material
 {
@@ -8,6 +9,7 @@ protected:
 	Material() = default;
 public:
 	virtual Color hit(const Vec3& point, const Vec3& norm) const = 0;
+	virtual void scatter(std::vector<Ray> newRays, const Vec3& point, const Vec3& norm) = 0;
 	virtual ~Material() = default;
 };
 
